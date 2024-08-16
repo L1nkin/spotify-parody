@@ -3,7 +3,7 @@ import { TrackType } from "./types";
 
 export type PlaylistResponse = {
   name: string;
-  imageUrl: string;
+  imageUrl?: string;
   description?: string;
   type: string;
   tracks: TrackType[];

@@ -159,6 +159,7 @@ const VolumeControl = styled.div`
 const Player: React.FC = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const { isPlaying, setIsPlaying } = useContext(PlayerContext);
+  const [isLoading, setIsLoading] = useState(false);
   // Load initial volume from localStorage or default to 0.5
   const [volume, setVolume] = useState(
     parseFloat(localStorage.getItem("playerVolume") || "0.5")
@@ -178,14 +179,21 @@ const Player: React.FC = () => {
     if (audioRef.current) {
       if (isPlaying) {
         (async () => {
-          const data = await getAudioFile({
+          setIsLoading(true);
+          getAudioFile({
             search: `${currentTrack?.artistName}-${currentTrack?.name}`,
-          });
-
-          if (audioRef.current) {
-            audioRef.current.src = data.link;
-            audioRef.current.play();
-          }
+          })
+            .then((res) => {
+              if (audioRef.current) {
+                audioRef.current.src = res.link;
+              }
+            })
+            .finally(() => {
+              if (audioRef.current) {
+                audioRef.current.play();
+                setIsLoading(false);
+              }
+            });
         })();
       } else {
         audioRef.current.pause();
@@ -290,7 +298,11 @@ const Player: React.FC = () => {
           <button className="control-button" onClick={handlePreviousTrack}>
             <FontAwesomeIcon icon={faStepBackward} />
           </button>
-          <button className="control-button" onClick={handlePlayPause}>
+          <button
+            className="control-button"
+            onClick={handlePlayPause}
+            disabled={isLoading}
+          >
             <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} />
           </button>
           <button className="control-button" onClick={handleNextTrack}>

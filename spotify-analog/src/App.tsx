@@ -16,6 +16,8 @@ import Player from "./components/Player/Player";
 import SearchPage from "./pages/SearchPage"; // <-- Make sure you have SearchPage.tsx in your "./pages" directory
 import { SuggestionsTypeResponse } from "./api/suggestions-requests";
 import { TrackType } from "./api/types";
+import CreateMyPlaylist from "./pages/CreateMyPlaylist";
+import MyPlaylist from "./pages/MyPlaylist";
 
 export const AuthContext = createContext({
   isAuth: false,
@@ -86,6 +88,8 @@ const App: React.FC = () => {
       <Route path="/profile" element={<Profile />} />
       <Route path="/profile-settings" element={<ProfileSettings />} />
       <Route path="/search" element={<SearchPage />} />
+      <Route path="/myPlaylists/create" element={<CreateMyPlaylist />} />
+      <Route path="/myPlaylists/:id" element={<MyPlaylist />} />
       <Route path="*" element={<Navigate to="/" replace />} />
       {/* <<< New Route added */}
     </Routes>

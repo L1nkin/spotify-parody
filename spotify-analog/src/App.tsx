@@ -15,6 +15,8 @@ import Profile from "./pages/ProfilePage";
 import ProfileSettings from "./pages/ProfileSettings";
 import Player from "./components/Player/Player";
 import SearchPage from "./pages/SearchPage"; // <-- Make sure you have SearchPage.tsx in your "./pages" directory
+import CreateMyPlaylist from "./pages/CreateMyPlaylist";
+import MyPlaylist from "./pages/MyPlaylist";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const AuthContext = createContext({isAuth: false, setAuth: (isAuth: boolean) => {}})
@@ -37,6 +39,8 @@ const App: React.FC = () => {
       <Route path="/profile" element={<Profile />} />
       <Route path="/profile-settings" element={<ProfileSettings />} />
       <Route path="/search" element={<SearchPage />} />
+      <Route path="/myPlaylists/create" element={< CreateMyPlaylist/>} />
+      <Route path="/myPlaylists/:id" element={<MyPlaylist />} />
       <Route path="*" element={<Navigate to="/" replace />} />
       {/* <<< New Route added */}
     </Routes>

@@ -3,6 +3,7 @@ import { faPlay } from "@fortawesome/free-solid-svg-icons/faPlay";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import styled from "styled-components";
+import { IconAddCircle } from "../../assets/icon-add-circle";
 
 const Wrapper = styled.div`
   display: flex;
@@ -86,6 +87,8 @@ type Props = {
   artistName: string;
   trackDuration: string;
   imageUri?: string;
+  showAddButton?: boolean
+  onTap: () => void
 };
 
 export const ListTrackItem = ({
@@ -94,6 +97,8 @@ export const ListTrackItem = ({
   imageUri,
   trackName,
   artistName,
+  showAddButton = true,
+  onTap
 }: Props) => {
   const [hover, setHover] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -119,7 +124,11 @@ export const ListTrackItem = ({
           <ArtistNameText isHover={hover}>{artistName}</ArtistNameText>
         </TrackInfoContent>
       </LeftSideContent>
-      <DurationText>{trackDuration}</DurationText>
+
+      <div style={{ display: 'flex', columnGap: '12px' }}>
+        {hover && showAddButton && <div onClick={onTap}><IconAddCircle /></div>}
+        <DurationText>{trackDuration}</DurationText>
+      </div>
     </Wrapper>
   );
 };

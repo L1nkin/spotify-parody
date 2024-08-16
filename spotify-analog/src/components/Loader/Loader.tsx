@@ -8,7 +8,7 @@ const Container = styled.div`
   height: 100%;
 `;
 
- const Loader = styled.div`
+const Loader = styled.div`
   border-width: 0.5rem;
   border-style: solid;
   border-color: #1ed760 #1ed760 #1ed760 transparent;
@@ -19,7 +19,6 @@ const Container = styled.div`
   -webkit-animation: spin linear 2s infinite;
   animation: spin linear 2s infinite;
 
-
   @keyframes spin {
     100% {
       transform: rotate(360deg);
@@ -29,11 +28,9 @@ const Container = styled.div`
 
 //Create functional component
 export const LoadingSpinner = () => {
-
   return (
     <Container>
-         <Loader />
+      <Loader />
     </Container>
   );
-
-}
+};

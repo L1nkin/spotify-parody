@@ -3,6 +3,7 @@ import { faPlay } from "@fortawesome/free-solid-svg-icons/faPlay";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import styled from "styled-components";
+import { IconAddCircle } from "../../assets/icon-add-circle";
 
 const Wrapper = styled.div`
   display: flex;
@@ -81,22 +82,29 @@ export const ItemImage = styled.img`
 `;
 
 type Props = {
+  isPlaying: boolean;
   number: number;
   trackName: string;
   artistName: string;
   trackDuration: string;
   imageUri?: string;
+  onPressTrack: () => void;
+  showAddButton?: boolean;
+  onTap: () => void;
 };
 
 export const ListTrackItem = ({
+  isPlaying,
   number,
   trackDuration,
   imageUri,
   trackName,
   artistName,
+  onPressTrack,
+  showAddButton = true,
+  onTap,
 }: Props) => {
   const [hover, setHover] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
 
   return (
     <Wrapper
@@ -106,7 +114,7 @@ export const ListTrackItem = ({
       <LeftSideContent>
         <PlayContent>
           {hover ? (
-            <PlayButton onClick={() => setIsPlaying((prev) => !prev)}>
+            <PlayButton onClick={onPressTrack}>
               <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} />
             </PlayButton>
           ) : (
@@ -119,7 +127,15 @@ export const ListTrackItem = ({
           <ArtistNameText isHover={hover}>{artistName}</ArtistNameText>
         </TrackInfoContent>
       </LeftSideContent>
-      <DurationText>{trackDuration}</DurationText>
+
+      <div style={{ display: "flex", columnGap: "12px" }}>
+        {hover && showAddButton && (
+          <div onClick={onTap}>
+            <IconAddCircle />
+          </div>
+        )}
+        <DurationText>{trackDuration}</DurationText>
+      </div>
     </Wrapper>
   );
 };

@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { AlbumResponse, getAlbumById } from "../api/get-albums-by-id";
 import { LoadingSpinner } from "../components/Loader/Loader";
 import { ListTrackItem } from "../components/ListTrackItem/ListTrackItem";
 import { formatMillisecondsToMMSS } from "../utils/format-milliseconds";
+import { PlayerContext, TracksContext } from "../App";
 
 const AlbumPageContainer = styled.div`
   padding: 20px;
@@ -48,19 +49,30 @@ const SongList = styled.ul`
   padding: 0;
 `;
 
+const LoaderWrapper = styled.div`
+  height: 80vh;
+  width: 100%;
+`;
+
 const AlbumPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [album, setAlbum] = useState<AlbumResponse>();
-
+  const { currentTrack, setCurrentTrack, setTracks } =
+    useContext(TracksContext);
+  const { isPlaying, setIsPlaying } = useContext(PlayerContext);
   useEffect(() => {
     (async () => {
       const data = await getAlbumById(id!);
       setAlbum(data);
     })();
-  }, []);
+  }, [id]);
 
   if (!album) {
-    return <LoadingSpinner />;
+    return (
+      <LoaderWrapper>
+        <LoadingSpinner />
+      </LoaderWrapper>
+    );
   }
 
   return (
@@ -81,6 +93,17 @@ const AlbumPage: React.FC = () => {
             trackName={track.name}
             artistName={track.artistName}
             trackDuration={formatMillisecondsToMMSS(track.duration)}
+            isPlaying={currentTrack?.id === track.id && isPlaying}
+            onPressTrack={() => {
+              setCurrentTrack({ ...track, imageUrl: album.imageUrl, index });
+              setTracks(
+                album.tracks.map((track) => ({
+                  ...track,
+                  imageUrl: album.imageUrl,
+                }))
+              );
+              setIsPlaying(currentTrack?.id === track.id ? !isPlaying : true);
+            }}
           />
         ))}
       </SongList>

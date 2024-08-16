@@ -81,22 +81,25 @@ export const ItemImage = styled.img`
 `;
 
 type Props = {
+  isPlaying: boolean;
   number: number;
   trackName: string;
   artistName: string;
   trackDuration: string;
   imageUri?: string;
+  onPressTrack: () => void;
 };
 
 export const ListTrackItem = ({
+  isPlaying,
   number,
   trackDuration,
   imageUri,
   trackName,
   artistName,
+  onPressTrack,
 }: Props) => {
   const [hover, setHover] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
 
   return (
     <Wrapper
@@ -106,7 +109,7 @@ export const ListTrackItem = ({
       <LeftSideContent>
         <PlayContent>
           {hover ? (
-            <PlayButton onClick={() => setIsPlaying((prev) => !prev)}>
+            <PlayButton onClick={onPressTrack}>
               <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} />
             </PlayButton>
           ) : (

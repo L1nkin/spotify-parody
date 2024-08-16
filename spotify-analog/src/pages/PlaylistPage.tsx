@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { getPlaylistById, PlaylistResponse } from "../api/get-playlist-by-id";
 import { LoadingSpinner } from "../components/Loader/Loader";
 import { ListTrackItem } from "../components/ListTrackItem/ListTrackItem";
 import { formatMillisecondsToMMSS } from "../utils/format-milliseconds";
+import { PlayerContext, TracksContext } from "../App";
 
 const PlaylistPageContainer = styled.div`
   padding: 20px 0 100px 0;
@@ -48,10 +49,17 @@ const SongList = styled.ul`
   padding: 0;
 `;
 
+const LoaderWrapper = styled.div`
+  height: 80vh;
+  width: 100%;
+`;
+
 const PlaylistPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [playlist, setPlaylist] = useState<PlaylistResponse>();
-
+  const { currentTrack, setCurrentTrack, setTracks } =
+    useContext(TracksContext);
+  const { isPlaying, setIsPlaying } = useContext(PlayerContext);
   useEffect(() => {
     (async () => {
       const data = await getPlaylistById(id!);
@@ -60,7 +68,11 @@ const PlaylistPage: React.FC = () => {
   }, [id]);
 
   if (!playlist) {
-    return <LoadingSpinner />;
+    return (
+      <LoaderWrapper>
+        <LoadingSpinner />
+      </LoaderWrapper>
+    );
   }
 
   return (
@@ -82,6 +94,12 @@ const PlaylistPage: React.FC = () => {
             artistName={track.artistName}
             trackDuration={formatMillisecondsToMMSS(track.duration)}
             imageUri={track.imageUrl}
+            isPlaying={currentTrack?.id === track.id && isPlaying}
+            onPressTrack={() => {
+              setCurrentTrack({ ...track, index });
+              setTracks(playlist.tracks);
+              setIsPlaying(currentTrack?.id === track.id ? !isPlaying : true);
+            }}
           />
         ))}
       </SongList>

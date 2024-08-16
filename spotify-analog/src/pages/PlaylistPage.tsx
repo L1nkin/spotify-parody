@@ -130,7 +130,9 @@ const PlaylistPage: React.FC = () => {
           <PlaylistInfo>
             <PlaylistType>{playlist.type}</PlaylistType>
             <PlaylistTitle>{playlist.name}</PlaylistTitle>
-            <PlaylistDescription>{playlist.description}</PlaylistDescription>
+            <PlaylistDescription
+              dangerouslySetInnerHTML={{ __html: playlist.description ?? "" }}
+            />
           </PlaylistInfo>
         </PlaylistHeader>
         <SongList>

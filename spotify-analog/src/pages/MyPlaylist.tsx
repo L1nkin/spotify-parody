@@ -51,6 +51,11 @@ const SongList = styled.ul`
   padding: 0;
 `;
 
+const LoaderWrapper = styled.div`
+  height: 80vh;
+  width: 100%;
+`;
+
 const MyPlaylist: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [playlist, setPlaylist] = useState<PlaylistResponse>();
@@ -66,7 +71,11 @@ const MyPlaylist: React.FC = () => {
   }, [id]);
 
   if (!playlist) {
-    return <LoadingSpinner />;
+    return (
+      <LoaderWrapper>
+        <LoadingSpinner />
+      </LoaderWrapper>
+    );
   }
 
   return (
